@@ -34,9 +34,13 @@
   <link rel="manifest" href="manifest.json">
 </head>
 
-<body>
+<body
+  style="background-color: #0A0E21; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif;">
+  <div id="loading-indicator" style="font-size: 24px; font-weight: bold;">
+    🛡️ LOADING GAS GUARD...
+  </div>
   <div id="error-container"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: red; padding: 20px; z-index: 9999; overflow: auto; white-space: pre-wrap; font-family: monospace;">
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: red; padding: 20px; z-index: 9999; overflow: auto; white-space: pre-wrap; font-family: monospace; text-align: left;">
   </div>
   <script>
     // Force HTML renderer
@@ -44,6 +48,7 @@
 
     // Global Error Handler
     function showError(msg) {
+      document.getElementById('loading-indicator').style.display = 'none';
       var container = document.getElementById('error-container');
       container.style.display = 'block';
       container.innerText += "ERROR: " + msg + "\n\n";
