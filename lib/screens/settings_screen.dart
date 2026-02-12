@@ -134,150 +134,264 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E21),
-      appBar: AppBar(
-        title: Text(
-          "SYSTEM CONFIGURATION",
-          style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, letterSpacing: 1),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(-0.5, -0.5),
+            radius: 1.5,
+            colors: [Color(0xFF1D1E33), Color(0xFF0A0E21)],
+          ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Connect to your Firebase Project",
-                    style: GoogleFonts.orbitron(fontSize: 18, color: const Color(0xFF00E5FF)),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "Enter the details from your google-services.json or Firebase Console.",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 30),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            bool isWide = constraints.maxWidth > 900;
 
-                  // --- Smart Import Section ---
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1D1E33),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.3)),
+            if (isWide) {
+              return Row(
+                children: [
+                  // Left Side: Branding / Hero
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      padding: const EdgeInsets.all(60),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.shield_outlined,
+                              size: 100, color: const Color(0xFF00E5FF).withOpacity(0.8)),
+                          const SizedBox(height: 30),
+                          Text(
+                            "GAS GUARD",
+                            style: GoogleFonts.orbitron(
+                              fontSize: 60,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              letterSpacing: 5,
+                            ),
+                          ),
+                          Text(
+                            "COMMAND CENTER",
+                            style: GoogleFonts.orbitron(
+                              fontSize: 30,
+                              color: const Color(0xFF00E5FF),
+                              letterSpacing: 2,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            "Secure. Monitor. Protect.\nInitialize your system parameters to begin.",
+                            style: GoogleFonts.roboto(
+                              fontSize: 18,
+                              color: Colors.white60,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Column(
+                  ),
+                  // Right Side: Form
+                  Expanded(
+                    flex: 5,
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 500),
+                        child: _buildFormCard(),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              // Mobile / Narrow Layout
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.shield_outlined,
+                          size: 60, color: const Color(0xFF00E5FF).withOpacity(0.8)),
+                      const SizedBox(height: 20),
+                      Text(
+                        "GAS GUARD",
+                        style: GoogleFonts.orbitron(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 3,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      _buildFormCard(),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormCard() {
+    return Card(
+      color: const Color(0xFF1D1E33).withOpacity(0.9), // Glassy dark
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: const Color(0xFF00E5FF).withOpacity(0.1)),
+      ),
+      elevation: 20,
+      shadowColor: const Color(0xFF00E5FF).withOpacity(0.1),
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "SYSTEM CONFIGURATION",
+                style: GoogleFonts.orbitron(
+                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+
+              // --- Smart Import Section ---
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: const Color(0xFF00E5FF).withOpacity(0.3)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const Icon(Icons.rocket_launch, color: Color(0xFF00E5FF), size: 18),
+                        const SizedBox(width: 10),
                         Text(
-                          "🚀 EASY SETUP",
+                          "QUICK SETUP",
                           style: GoogleFonts.orbitron(
                               color: const Color(0xFF00E5FF), fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          "Copy the 'firebaseConfig' code block from Firebase Console and paste it here:",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
-                        const SizedBox(height: 10),
-                        TextField(
-                          maxLines: 3,
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
-                          decoration: InputDecoration(
-                            hintText: 'Paste code here (const firebaseConfig = { ... })',
-                            hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.3)),
-                            filled: true,
-                            fillColor: Colors.black26,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                            contentPadding: const EdgeInsets.all(10),
-                          ),
-                          onChanged: _parseConfigInput,
-                        ),
-                        if (_parseMessage != null) ...[
-                          const SizedBox(height: 5),
-                          Text(
-                            _parseMessage!,
-                            style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
-                          )
-                        ]
                       ],
                     ),
-                  ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // --- Advanced Fields (Auto-filled) ---
-                  ExpansionTile(
-                    title: Text("Advanced Details (Auto-filled)", style: GoogleFonts.roboto(color: Colors.white70)),
-                    children: [
-                       _buildTextField(
-                        controller: _dbUrlController,
-                        label: "Database URL",
-                        hint: "https://your-project.firebaseio.com",
-                        icon: Icons.link,
+                    const SizedBox(height: 10),
+                    Text(
+                      "Paste 'firebaseConfig' from Console",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      maxLines: 2,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      decoration: InputDecoration(
+                        hintText: '{ apiKey: "...", ... }',
+                        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.3)),
+                        filled: true,
+                        fillColor: Colors.transparent,
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.all(10),
                       ),
-                      const SizedBox(height: 15),
-                      _buildTextField(
-                        controller: _apiKeyController,
-                        label: "API Key",
-                        hint: "AIzaSy...",
-                        icon: Icons.vpn_key,
-                      ),
-                      const SizedBox(height: 15),
-                      _buildTextField(
-                        controller: _projectIdController,
-                        label: "Project ID",
-                        hint: "gas-leak-project",
-                        icon: Icons.work,
-                      ),
-                      const SizedBox(height: 15),
-                      _buildTextField(
-                        controller: _appIdController,
-                        label: "App ID",
-                        hint: "1:123456789:android:...",
-                        icon: Icons.apps,
-                      ),
-                      const SizedBox(height: 15),
-                      _buildTextField(
-                        controller: _messagingSenderIdController,
-                        label: "Messaging Sender ID",
-                        hint: "123456789",
-                        icon: Icons.message,
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  _isLoading
-                      ? const Center(child: CircularProgressIndicator(color: Color(0xFF00E5FF)))
-                      : ElevatedButton.icon(
-                          onPressed: _saveAndConnect,
-                          icon: const Icon(Icons.rocket_launch),
-                          label: Text(widget.isFirstRun ? "LAUNCH MISSION CONTROL" : "SAVE CONFIGURATION"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF00E5FF).withValues(alpha: 0.2),
-                            foregroundColor: const Color(0xFF00E5FF),
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            textStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
-                            side: const BorderSide(color: Color(0xFF00E5FF)),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          ),
-                        ),
-                ],
+                      onChanged: _parseConfigInput,
+                    ),
+                    if (_parseMessage != null) ...[
+                      const SizedBox(height: 5),
+                      Text(
+                        _parseMessage!,
+                        style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
+                      )
+                    ]
+                  ],
+                ),
               ),
-            ),
+
+              const SizedBox(height: 20),
+
+              // --- Advanced Fields (Auto-filled) ---
+              Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  tilePadding: EdgeInsets.zero,
+                  collapsedIconColor: Colors.white54,
+                  iconColor: const Color(0xFF00E5FF),
+                  title: Text("Advanced Settings",
+                      style: GoogleFonts.roboto(color: Colors.white70, fontSize: 14)),
+                  children: [
+                    _buildTextField(
+                      controller: _dbUrlController,
+                      label: "Database URL",
+                      hint: "https://...",
+                      icon: Icons.link,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      controller: _apiKeyController,
+                      label: "API Key",
+                      hint: "AIzaSy...",
+                      icon: Icons.vpn_key,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      controller: _projectIdController,
+                      label: "Project ID",
+                      hint: "gas-leak-project",
+                      icon: Icons.work,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      controller: _appIdController,
+                      label: "App ID",
+                      hint: "1:123...",
+                      icon: Icons.apps,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      controller: _messagingSenderIdController,
+                      label: "Sender ID",
+                      hint: "123...",
+                      icon: Icons.message,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator(color: Color(0xFF00E5FF)))
+                  : MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: ElevatedButton(
+                        onPressed: _saveAndConnect,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF00E5FF),
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          textStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
+                          shape:
+                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          elevation: 10,
+                          shadowColor: const Color(0xFF00E5FF).withOpacity(0.4),
+                        ),
+                        child: Text(widget.isFirstRun
+                            ? "INITIALIZE SYSTEM"
+                            : "SAVE CONFIGURATION"),
+                      ),
+                    ),
+            ],
           ),
         ),
       ),
+    );
+  }
     );
   }
 
