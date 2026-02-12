@@ -84,6 +84,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _isLoading = true);
 
     try {
+      // Sanitize DB URL
+      String dbUrl = _dbUrlController.text.trim();
+      if (dbUrl.isNotEmpty) {
+        if (!dbUrl.startsWith("https://")) {
+          dbUrl = "https://$dbUrl";
+        }
+        if (dbUrl.endsWith("/")) {
+          dbUrl = dbUrl.substring(0, dbUrl.length - 1);
+        }
+        _dbUrlController.text = dbUrl; // Update UI to show fixed URL
+      }
+
       // 1. Temporarily init Firebase to test connection
       try {
         if (Firebase.apps.isNotEmpty) {
@@ -95,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             appId: _appIdController.text.trim(),
             messagingSenderId: _messagingSenderIdController.text.trim(),
             projectId: _projectIdController.text.trim(),
-            databaseURL: _dbUrlController.text.trim(),
+            databaseURL: dbUrl,
           ),
         );
 
