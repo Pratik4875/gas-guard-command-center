@@ -43,9 +43,6 @@
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: red; padding: 20px; z-index: 9999; overflow: auto; white-space: pre-wrap; font-family: monospace; text-align: left;">
   </div>
   <script>
-    // Force HTML renderer
-    window.flutterWebRenderer = "html";
-
     // Global Error Handler
     function showError(msg) {
       document.getElementById('loading-indicator').style.display = 'none';
@@ -60,10 +57,18 @@
     };
 
     window.addEventListener('unhandledrejection', function (event) {
-      showError("Unhandled Promise Rejection: " + event.reason);
+      showError("Unhandled Rejection: " + event.reason);
     });
   </script>
+
   <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    // Configuration for Flutter Web (New API)
+    window.flutterConfiguration = {
+      renderer: "html", // Force HTML renderer
+    };
+  </script>
 </body>
 
 </html>
