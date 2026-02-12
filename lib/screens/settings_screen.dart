@@ -129,11 +129,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
 
     } catch (e) {
+      // Log full error for debugging
+      debugPrint("Firebase Connection Error: $e");
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error: $e"),
+        const SnackBar(
+          content: Text("Connection failed. Check your URL and keys."),
           backgroundColor: Colors.redAccent,
-          duration: const Duration(seconds: 5),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     } finally {
