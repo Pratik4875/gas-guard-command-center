@@ -83,21 +83,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // 1. Save to Storage
-      await ConfigService().saveSettings(
-        dbUrl: _dbUrlController.text.trim(),
-        apiKey: _apiKeyController.text.trim(),
-        projectId: _projectIdController.text.trim(),
-        appId: _appIdController.text.trim(),
-        messagingSenderId: _messagingSenderIdController.text.trim(),
-      );
-
-      // 2. Try to Initialize Firebase with these new settings
-      // We might need to re-initialize if it was already initialized.
-      // For simplicity, we might ask the user to restart, or try to init here.
+      // 1. Temporarily init Firebase to test connection
       try {
         if (Firebase.apps.isNotEmpty) {
-          await Firebase.app().delete(); // Reset existing app
+          await Firebase.app().delete();
         }
         await Firebase.initializeApp(
           options: FirebaseOptions(
@@ -108,33 +97,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
             databaseURL: _dbUrlController.text.trim(),
           ),
         );
+
+        // 2. Test Connection explicitly
+        // We try to access the root reference to ensure the URL is valid and reachable.
+        // Reading '.info/connected' is a standard way to check state, but a simple root check works too.
+        await FirebaseDatabase.instance.ref().root.get().timeout(const Duration(seconds: 5));
+        
       } catch (e) {
-        // If init fails, valid creds might be wrong
-        ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text("Error connecting to Firebase: $e")),
-        );
-        setState(() => _isLoading = false);
-        return;
+        throw "Connection failed. Please check your URL and keys. ($e)";
       }
 
+      // 3. Save to Storage only if connection succeeded
+      await ConfigService().saveSettings(
+        dbUrl: _dbUrlController.text.trim(),
+        apiKey: _apiKeyController.text.trim(),
+        projectId: _projectIdController.text.trim(),
+        appId: _appIdController.text.trim(),
+        messagingSenderId: _messagingSenderIdController.text.trim(),
+      );
+
       if (widget.isFirstRun) {
-        // Navigate to Dashboard
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DashboardScreen()),
         );
       } else {
-        Navigator.of(context).pop(); // Go back
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Settings Saved! Reconnecting...")),
+          const SnackBar(content: Text("Settings Saved & Connected! 🚀")),
         );
       }
 
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error saving settings: $e")),
+        SnackBar(
+          content: Text("Error: $e"),
+          backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 5),
+        ),
       );
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -445,7 +447,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if (value == null || value.trim().isEmpty) {
           return 'This field is required';
         }
         return null;
