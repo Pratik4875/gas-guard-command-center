@@ -54,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
 
     await _notificationsPlugin.initialize(
-      initializationSettings: initializationSettings,
+      settings: initializationSettings,
     );
   }
 
