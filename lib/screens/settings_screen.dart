@@ -70,7 +70,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _saveAndConnect() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill in all required fields"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
 
     setState(() => _isLoading = true);
 
@@ -134,6 +142,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E21),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: widget.isFirstRun 
+            ? null 
+            : IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF00E5FF)),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
