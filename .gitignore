@@ -1,0 +1,56 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this is
+# commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+/android/app/build/
+/android/.gradle/
+/ios/.symlinks/
+/ios/Pods/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/App.framework
+/ios/Flutter/flutter_assets/
+/macos/Flutter/ephemeral/
+/web/flutter_service_worker.js
+
+# Firebase
+firebase_options.dart
+google-services.json
+GoogleService-Info.plist
+
+# Gradle
+.gradle/
+**/build/
+!gradle-wrapper.jar
+!libs/
+
+# Local configuration
+lib/services/config_service.dart # Wait, actually we want to keep the SERVICE logic, but maybe not the CREDENTIALS if they were hardcoded. But they are empty defaults now.
+# However, user credentials might be in shared_prefs on device, which is fine.
+# But we should ignore if we ever hardcoded secrets. We didn't.
+# We DO want to ignore the user's specific build outputs.
