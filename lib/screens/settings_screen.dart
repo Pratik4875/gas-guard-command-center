@@ -392,8 +392,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
-    );
-  }
+
 
   Widget _buildTextField({
     required TextEditingController controller,
