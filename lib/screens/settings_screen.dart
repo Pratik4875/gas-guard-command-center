@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/config_service.dart';
 import 'dashboard_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SettingsScreen extends StatefulWidget {
   final bool isFirstRun;
