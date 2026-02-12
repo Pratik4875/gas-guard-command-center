@@ -50,9 +50,10 @@ GoogleService-Info.plist
 !libs/
 
 # Local configuration
+# Local configuration
 lib/services/config_service.dart # Wait, actually we want to keep the SERVICE logic, but maybe not the CREDENTIALS if they were hardcoded. But they are empty defaults now.
 # However, user credentials might be in shared_prefs on device, which is fine.
 # But we should ignore if we ever hardcoded secrets. We didn't.
 # We DO want to ignore the user's specific build outputs.
-!/build/web/
-.vercel
+!.vercel
+!build/web/
