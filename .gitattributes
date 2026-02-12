@@ -1,0 +1,3 @@
+# Ignore web build artifacts from language statistics
+build/web/** linguist-vendored
+build/web/** linguist-generated
