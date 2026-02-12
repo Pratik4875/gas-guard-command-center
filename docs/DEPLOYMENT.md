@@ -51,6 +51,9 @@ If you prefer Render:
 1.  Go to [dashboard.render.com](https://dashboard.render.com).
 2.  New **Static Site**.
 3.  Connect your GitHub repo.
-4.  **Build Command**: `flutter build web --release`
+4.  **Build Command**: ```bash
+flutter build web --release --web-renderer html
+```
+*Note: The `--web-renderer html` flag is recommended for broader compatibility (including Safari) to avoid white screen issues.*
 5.  **Publish Directory**: `build/web`
 6.  Click **Create Static Site**.

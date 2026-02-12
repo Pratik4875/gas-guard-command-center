@@ -8,6 +8,7 @@ import 'analytics_screen.dart';
 import 'settings_screen.dart';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DashboardScreen extends StatefulWidget {
   final bool isConfigured;
@@ -23,7 +24,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<double> weeklyAqi = [45, 50, 48, 52, 60, 55, 58]; // Mock data for now
   StreamSubscription<DatabaseEvent>? _gasStream;
   Timer? _demoTimer;
-  bool _alertShown = false; 
+  // Alert management
+  bool _isDialogVisible = false;
+  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin(); 
 
   @override
   void initState() {
@@ -33,6 +36,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } else {
       _startDemoMode();
     }
+    _initNotifications();
+  }
+
+  void _initNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    
+    // For iOS/macOS (default permissions)
+    const DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings();
+
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+      macOS: initializationSettingsDarwin,
+    );
+
+    await _notificationsPlugin.initialize(initializationSettings);
   }
 
   void _activateListeners() {
@@ -74,18 +95,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _checkAlert() {
-    // Show alert if high and not already shown recently
-    if (gasLevel > 300 && !_alertShown) {
-      _showNotificationLikePopup();
-      _alertShown = true;
-      // Reset alert flag after 10 seconds so it can show again
-      Future.delayed(const Duration(seconds: 10), () {
-        if (mounted) setState(() => _alertShown = false);
-      });
+    // 1. If gas is HIGH (>300)
+    if (gasLevel > 300) {
+      // Show Notification (System) - throttling to avoid spamming every second
+      // We rely on the periodic check or existing state to not spam too hard, 
+      // but for now let's just show it if we haven't shown the dialog recently.
+      if (!_isDialogVisible) {
+        _showNotificationLikePopup();
+        _showSystemNotification();
+      }
+    } 
+    // 2. If gas is LOW (<300) but dialog is still open -> Dismiss it
+    else if (gasLevel <= 300 && _isDialogVisible) {
+      Navigator.of(context).pop(); // Close the dialog
+      _isDialogVisible = false;
     }
   }
 
+  Future<void> _showSystemNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'gas_alert_channel', 'Gas Alerts',
+            channelDescription: 'High priority alerts for gas leaks',
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: true);
+            
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+        
+    await _notificationsPlugin.show(
+      0, 
+      '⚠️ GAS LEAK DETECTED!', 
+      'Level: ${gasLevel.toInt()} PPM. Evacuate safely.', 
+      platformChannelSpecifics
+    );
+  }
+
   void _showNotificationLikePopup() {
+    _isDialogVisible = true;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -110,12 +158,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
+            onPressed: () {
+               Navigator.of(ctx).pop();
+               _isDialogVisible = false;
+            },
             child: Text("DISMISS", style: TextStyle(color: Theme.of(context).primaryColor)),
           )
         ],
       ),
-    );
+    ).then((_) {
+      // Ensure flag is reset if dialog is closed by other means (e.g. back button)
+      if (mounted) {
+        _isDialogVisible = false;
+      }
+    });
   }
 
   @override
