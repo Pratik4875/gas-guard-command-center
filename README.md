@@ -14,10 +14,17 @@ This project is an educational tool designed to teach 4th and 5th graders about 
 *   **Weekly Reports**: Track air quality over time.
 *   **Smart Alerts**: Get pop-up warnings if gas is detected.
 
+## 📸 Screenshots
+| Dashboard | Settings | Gas Alert |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/dashboard_placeholder.png" width="200" alt="Dashboard UI" /> | <img src="docs/screenshots/settings_placeholder.png" width="200" alt="Settings UI" /> | <img src="docs/screenshots/alert_placeholder.png" width="200" alt="Alert UI" /> |
+
+*> **Note for Students:** I have left these placeholders here. Once you test the app, take screenshots and replace these images in the `docs/screenshots` folder!*
+
 ## 📂 Project Structure
 *   `lib/` - The Flutter Application code.
 *   `firmware/` - The C++ code for the ESP8266 microcontroller.
-*   `USER_GUIDE.md` - **START HERE!** Detailed instructions on setup.
+*   `docs/` - **Documentation & Guides**.
 
 ## 🚀 Getting Started
 1.  **Hardware**: Flash the code in `firmware/` to your ESP8266.
@@ -28,11 +35,11 @@ This project is an educational tool designed to teach 4th and 5th graders about 
     *   Run `flutter run`.
 4.  **Config**: Use the "Active/Smart Import" feature in the app to connect your database.
 
-👉 **[READ THE FULL USER GUIDE](USER_GUIDE.md)**
+👉 **[READ THE FULL USER GUIDE](docs/USER_GUIDE.md)**
 
 ## 🌍 Sharing & Hosting
 Want to put this on GitHub or host the Web App online?
-👉 **[READ THE DEPLOYMENT GUIDE](DEPLOYMENT.md)**
+👉 **[READ THE DEPLOYMENT GUIDE](docs/DEPLOYMENT.md)**
 
 ## License
 MIT License - Free for educational use!
