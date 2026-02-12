@@ -33,15 +33,15 @@ Vercel is the easiest way to host your Flutter Web app for free.
 4.  Look for a "Drag and Drop" area (or install Vercel CLI).
     *   *Note: Drag & drop might be hidden in their new UI. If so, use Option B.*
 
-### Option B: Import from GitHub (Recommended)
-1.  Once you pushed your code to GitHub (Part 1).
+### Option B: Import from GitHub (Updated Method)
+1.  **Push the built files**: (I have just done this for you!) via `git push`.
 2.  Go to [vercel.com/new](https://vercel.com/new).
 3.  **Import** your `gas-guard-command-center` repository.
 4.  **Framework Preset**: Select **Other**.
-5.  **Build Command**: `flutter build web --release`
+5.  **Build Command**: `echo "Skipping build"` (We already built it!)
 6.  **Output Directory**: `build/web`
 7.  Click **Deploy**.
-8.  **Done!** You will get a link like `https://gas-guard.vercel.app`.
+8.  **Done!** You will get a link.
 
 ---
 
