@@ -135,6 +135,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E21),
       body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           gradient: RadialGradient(
             center: Alignment(-0.5, -0.5),

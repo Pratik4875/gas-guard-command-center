@@ -141,29 +141,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E21),
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "MISSION CONTROL",
-              style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, letterSpacing: 2),
-            ),
-            if (!widget.isConfigured) ...[
-              const SizedBox(width: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.amber),
-                ),
-                child: Text(
-                  "DEMO MODE",
-                  style: GoogleFonts.roboto(fontSize: 10, color: Colors.amber, fontWeight: FontWeight.bold),
-                ),
-              )
-            ]
-          ],
+        title: Text(
+          "MISSION CONTROL",
+          style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, letterSpacing: 2),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -198,6 +178,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       body: Stack(
+        fit: StackFit.expand,
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
