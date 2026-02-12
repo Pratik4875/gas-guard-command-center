@@ -339,34 +339,88 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Container(
                 color: Colors.amber.withOpacity(0.9),
                 padding: const EdgeInsets.all(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.link_off, color: Colors.black),
-                    const SizedBox(width: 10),
-                    Text(
-                      "NO DATABASE CONNECTED • DEMO MODE ACTIVE",
-                      style: GoogleFonts.orbitron(
-                        color: Colors.black, 
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                         Navigator.push(
-                           context, 
-                           MaterialPageRoute(builder: (context) => const SettingsScreen()), 
-                         );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.amber,
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      ),
-                      child: const Text("CONNECT NOW"),
-                    )
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isMobile = constraints.maxWidth < 600;
+                    return isMobile 
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.link_off, color: Colors.black),
+                                const SizedBox(width: 10),
+                                Flexible(
+                                  child: Text(
+                                    "DEMO MODE ACTIVE",
+                                    style: GoogleFonts.orbitron(
+                                      color: Colors.black, 
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                                "No Database Connected",
+                                style: GoogleFonts.roboto(
+                                  color: Colors.black87,
+                                  fontSize: 12
+                                ),
+                            ),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                   Navigator.push(
+                                     context, 
+                                     MaterialPageRoute(builder: (context) => const SettingsScreen()), 
+                                   );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.amber,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                ),
+                                child: const Text("CONNECT NOW"),
+                              ),
+                            )
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.link_off, color: Colors.black),
+                            const SizedBox(width: 10),
+                            Text(
+                              "NO DATABASE CONNECTED • DEMO MODE ACTIVE",
+                              style: GoogleFonts.orbitron(
+                                color: Colors.black, 
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                 Navigator.push(
+                                   context, 
+                                   MaterialPageRoute(builder: (context) => const SettingsScreen()), 
+                                 );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.amber,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              ),
+                              child: const Text("CONNECT NOW"),
+                            )
+                          ],
+                        );
+                  },
                 ),
               ),
             ),
