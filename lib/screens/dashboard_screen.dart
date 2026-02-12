@@ -8,7 +8,9 @@ import 'analytics_screen.dart';
 import 'settings_screen.dart';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+import 'package:gas_leak_detection/services/notification_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   final bool isConfigured;
@@ -26,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Timer? _demoTimer;
   // Alert management
   bool _isDialogVisible = false;
-  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin(); 
+  final NotificationService _notificationService = NotificationService();
 
   @override
   void initState() {
@@ -36,32 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } else {
       _startDemoMode();
     }
-    _initNotifications();
-  }
-
-  void _initNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    
-    // For iOS/macOS (default permissions)
-    const DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings();
-
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin,
-      macOS: initializationSettingsDarwin,
-    );
-
-    await _notificationsPlugin.initialize(
-      settings: initializationSettings,
-    );
-
-    // Request permissions for Android 13+
-    await _notificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
+    _notificationService.init();
   }
 
   void _activateListeners() {
@@ -110,7 +87,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // but for now let's just show it if we haven't shown the dialog recently.
       if (!_isDialogVisible) {
         _showNotificationLikePopup();
-        _showSystemNotification();
+        _notificationService.showNotification(
+          '⚠️ GAS LEAK DETECTED!', 
+          'Level: ${gasLevel.toInt()} PPM. Evacuate safely.'
+        );
       }
     } 
     // 2. If gas is LOW (<300) but dialog is still open -> Dismiss it
@@ -118,26 +98,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       Navigator.of(context).pop(); // Close the dialog
       _isDialogVisible = false;
     }
-  }
-
-  Future<void> _showSystemNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            'gas_alert_channel', 'Gas Alerts',
-            channelDescription: 'High priority alerts for gas leaks',
-            importance: Importance.max,
-            priority: Priority.high,
-            showWhen: true);
-            
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-        
-    await _notificationsPlugin.show(
-      id: 0, 
-      title: '⚠️ GAS LEAK DETECTED!', 
-      body: 'Level: ${gasLevel.toInt()} PPM. Evacuate safely.', 
-      notificationDetails: platformChannelSpecifics
-    );
   }
 
   void _showNotificationLikePopup() {
@@ -338,6 +298,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               return AnimatedContainer(
                 duration: const Duration(seconds: 1),
+                padding: const EdgeInsets.only(bottom: 80), // Prevent overlap with banner
                 decoration: BoxDecoration(
                   color: bgColor,
                   gradient: RadialGradient(
