@@ -143,133 +143,138 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                "Connect to your Firebase Project",
-                style: GoogleFonts.orbitron(fontSize: 18, color: const Color(0xFF00E5FF)),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "Enter the details from your google-services.json or Firebase Console.",
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 30),
-
-              // --- Smart Import Section ---
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1D1E33),
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.3)),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      "🚀 EASY SETUP",
-                      style: GoogleFonts.orbitron(
-                          color: const Color(0xFF00E5FF), fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Copy the 'firebaseConfig' code block from Firebase Console and paste it here:",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      maxLines: 3,
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
-                      decoration: InputDecoration(
-                        hintText: 'Paste code here (const firebaseConfig = { ... })',
-                        hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.3)),
-                        filled: true,
-                        fillColor: Colors.black26,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        contentPadding: const EdgeInsets.all(10),
-                      ),
-                      onChanged: _parseConfigInput,
-                    ),
-                    if (_parseMessage != null) ...[
-                      const SizedBox(height: 5),
-                      Text(
-                        _parseMessage!,
-                        style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
-                      )
-                    ]
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // --- Advanced Fields (Auto-filled) ---
-              ExpansionTile(
-                title: Text("Advanced Details (Auto-filled)", style: GoogleFonts.roboto(color: Colors.white70)),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                   _buildTextField(
-                    controller: _dbUrlController,
-                    label: "Database URL",
-                    hint: "https://your-project.firebaseio.com",
-                    icon: Icons.link,
+                  Text(
+                    "Connect to your Firebase Project",
+                    style: GoogleFonts.orbitron(fontSize: 18, color: const Color(0xFF00E5FF)),
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _apiKeyController,
-                    label: "API Key",
-                    hint: "AIzaSy...",
-                    icon: Icons.vpn_key,
+                  const SizedBox(height: 10),
+                  Text(
+                    "Enter the details from your google-services.json or Firebase Console.",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.grey),
                   ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _projectIdController,
-                    label: "Project ID",
-                    hint: "gas-leak-project",
-                    icon: Icons.work,
+                  const SizedBox(height: 30),
+
+                  // --- Smart Import Section ---
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1D1E33),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.3)),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "🚀 EASY SETUP",
+                          style: GoogleFonts.orbitron(
+                              color: const Color(0xFF00E5FF), fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Copy the 'firebaseConfig' code block from Firebase Console and paste it here:",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          maxLines: 3,
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          decoration: InputDecoration(
+                            hintText: 'Paste code here (const firebaseConfig = { ... })',
+                            hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.3)),
+                            filled: true,
+                            fillColor: Colors.black26,
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                          onChanged: _parseConfigInput,
+                        ),
+                        if (_parseMessage != null) ...[
+                          const SizedBox(height: 5),
+                          Text(
+                            _parseMessage!,
+                            style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
+                          )
+                        ]
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _appIdController,
-                    label: "App ID",
-                    hint: "1:123456789:android:...",
-                    icon: Icons.apps,
+                  
+                  const SizedBox(height: 20),
+                  
+                  // --- Advanced Fields (Auto-filled) ---
+                  ExpansionTile(
+                    title: Text("Advanced Details (Auto-filled)", style: GoogleFonts.roboto(color: Colors.white70)),
+                    children: [
+                       _buildTextField(
+                        controller: _dbUrlController,
+                        label: "Database URL",
+                        hint: "https://your-project.firebaseio.com",
+                        icon: Icons.link,
+                      ),
+                      const SizedBox(height: 15),
+                      _buildTextField(
+                        controller: _apiKeyController,
+                        label: "API Key",
+                        hint: "AIzaSy...",
+                        icon: Icons.vpn_key,
+                      ),
+                      const SizedBox(height: 15),
+                      _buildTextField(
+                        controller: _projectIdController,
+                        label: "Project ID",
+                        hint: "gas-leak-project",
+                        icon: Icons.work,
+                      ),
+                      const SizedBox(height: 15),
+                      _buildTextField(
+                        controller: _appIdController,
+                        label: "App ID",
+                        hint: "1:123456789:android:...",
+                        icon: Icons.apps,
+                      ),
+                      const SizedBox(height: 15),
+                      _buildTextField(
+                        controller: _messagingSenderIdController,
+                        label: "Messaging Sender ID",
+                        hint: "123456789",
+                        icon: Icons.message,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 15),
-                  _buildTextField(
-                    controller: _messagingSenderIdController,
-                    label: "Messaging Sender ID",
-                    hint: "123456789",
-                    icon: Icons.message,
-                  ),
+
+                  const SizedBox(height: 40),
+
+                  _isLoading
+                      ? const Center(child: CircularProgressIndicator(color: Color(0xFF00E5FF)))
+                      : ElevatedButton.icon(
+                          onPressed: _saveAndConnect,
+                          icon: const Icon(Icons.rocket_launch),
+                          label: Text(widget.isFirstRun ? "LAUNCH MISSION CONTROL" : "SAVE CONFIGURATION"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF00E5FF).withValues(alpha: 0.2),
+                            foregroundColor: const Color(0xFF00E5FF),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            textStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
+                            side: const BorderSide(color: Color(0xFF00E5FF)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
                 ],
               ),
-
-              const SizedBox(height: 40),
-
-              _isLoading
-                  ? const Center(child: CircularProgressIndicator(color: Color(0xFF00E5FF)))
-                  : ElevatedButton.icon(
-                      onPressed: _saveAndConnect,
-                      icon: const Icon(Icons.rocket_launch),
-                      label: Text(widget.isFirstRun ? "LAUNCH MISSION CONTROL" : "SAVE CONFIGURATION"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF00E5FF).withValues(alpha: 0.2),
-                        foregroundColor: const Color(0xFF00E5FF),
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        textStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
-                        side: const BorderSide(color: Color(0xFF00E5FF)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                    ),
-            ],
+            ),
           ),
         ),
       ),

@@ -139,55 +139,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
            )
         ],
       ),
-      body: AnimatedContainer(
-        duration: const Duration(seconds: 1),
-        decoration: BoxDecoration(
-          color: bgColor,
-          gradient: RadialGradient(
-            center: Alignment.center,
-            radius: 1.2,
-            colors: [
-              const Color(0xFF1D1E33),
-              const Color(0xFF0A0E21),
-            ],
-          ),
-        ),
-        child: Center(
-          child: Column(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isWide = constraints.maxWidth > 600;
+
+          // Common Widgets
+          Widget gauge = CircularPercentIndicator(
+            radius: isWide ? 180.0 : 150.0,
+            lineWidth: isWide ? 40.0 : 30.0,
+            percent: (gasLevel / 1000).clamp(0.0, 1.0),
+            center: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  gasLevel.toInt().toString(),
+                  style: GoogleFonts.orbitron(
+                    fontSize: isWide ? 90 : 72,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  "PPM",
+                  style: GoogleFonts.orbitron(fontSize: isWide ? 30 : 24, color: Colors.grey),
+                ),
+              ],
+            ),
+            progressColor: statusColor,
+            backgroundColor: Colors.white10,
+            circularStrokeCap: CircularStrokeCap.round,
+            animation: true,
+            animateFromLastPercent: true,
+          );
+
+          Widget statusInfo = Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // 1. Status Indicator (Big gauge)
-              CircularPercentIndicator(
-                radius: 150.0,
-                lineWidth: 30.0,
-                percent: (gasLevel / 1000).clamp(0.0, 1.0),
-                center: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      gasLevel.toInt().toString(),
-                      style: GoogleFonts.orbitron(
-                        fontSize: 72,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "PPM",
-                      style: GoogleFonts.orbitron(fontSize: 24, color: Colors.grey),
-                    ),
-                  ],
-                ),
-                progressColor: statusColor,
-                backgroundColor: Colors.white10,
-                circularStrokeCap: CircularStrokeCap.round,
-                animation: true,
-                animateFromLastPercent: true,
-              ),
-              
-              const SizedBox(height: 50),
-              
-              // 2. Status Message
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 decoration: BoxDecoration(
@@ -222,10 +209,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 40),
-              
-              // 3. Navigation Button
               OutlinedButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -244,8 +228,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               )
             ],
-          ),
-        ),
+          );
+
+          return AnimatedContainer(
+            duration: const Duration(seconds: 1),
+            decoration: BoxDecoration(
+              color: bgColor,
+              gradient: RadialGradient(
+                center: Alignment.center,
+                radius: 1.2,
+                colors: [
+                  const Color(0xFF1D1E33),
+                  const Color(0xFF0A0E21),
+                ],
+              ),
+            ),
+            child: isWide
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(child: Center(child: gauge)),
+                      Expanded(child: Center(child: statusInfo)),
+                    ],
+                  )
+                : Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 20),
+                          gauge,
+                          const SizedBox(height: 50),
+                          statusInfo,
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ),
+          );
+        },
       ),
     );
   }
