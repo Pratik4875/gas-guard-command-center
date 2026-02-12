@@ -56,6 +56,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     await _notificationsPlugin.initialize(
       settings: initializationSettings,
     );
+
+    // Request permissions for Android 13+
+    await _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
   }
 
   void _activateListeners() {
