@@ -53,7 +53,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       macOS: initializationSettingsDarwin,
     );
 
-    await _notificationsPlugin.initialize(initializationSettings);
+    await _notificationsPlugin.initialize(
+      initializationSettings: initializationSettings,
+    );
   }
 
   void _activateListeners() {
@@ -125,10 +127,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         NotificationDetails(android: androidPlatformChannelSpecifics);
         
     await _notificationsPlugin.show(
-      0, 
-      '⚠️ GAS LEAK DETECTED!', 
-      'Level: ${gasLevel.toInt()} PPM. Evacuate safely.', 
-      platformChannelSpecifics
+      id: 0, 
+      title: '⚠️ GAS LEAK DETECTED!', 
+      body: 'Level: ${gasLevel.toInt()} PPM. Evacuate safely.', 
+      notificationDetails: platformChannelSpecifics
     );
   }
 
