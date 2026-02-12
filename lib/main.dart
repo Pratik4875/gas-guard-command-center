@@ -11,8 +11,7 @@ void main() async {
   // Check if we have saved settings
   final configService = ConfigService();
   final hasSettings = await configService.hasSettings();
-  
-  Widget initialScreen = const SettingsScreen(isFirstRun: true);
+  bool isConfigured = false;
 
   if (hasSettings) {
     try {
@@ -26,21 +25,20 @@ void main() async {
           databaseURL: settings['dbUrl']!,
         ),
       );
-      initialScreen = const DashboardScreen();
+      isConfigured = true;
     } catch (e) {
       print("Error initializing Firebase from saved settings: $e");
-      // If error, go to settings to fix
-      initialScreen = const SettingsScreen(isFirstRun: true);
+      isConfigured = false;
     }
   }
 
-  runApp(GasLeakDetectorApp(home: initialScreen));
+  runApp(GasLeakDetectorApp(isConfigured: isConfigured));
 }
 
 class GasLeakDetectorApp extends StatelessWidget {
-  final Widget home;
+  final bool isConfigured;
 
-  const GasLeakDetectorApp({super.key, required this.home});
+  const GasLeakDetectorApp({super.key, required this.isConfigured});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class GasLeakDetectorApp extends StatelessWidget {
           ),
         ),
       ),
-      home: home,
+      home: DashboardScreen(isConfigured: isConfigured),
     );
   }
 }
