@@ -196,8 +196,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.shield_outlined,
-                              size: 100, color: const Color(0xFF00E5FF).withOpacity(0.8)),
+                          // Icon(Icons.shield_outlined,
+                          //     size: 100, color: const Color(0xFF00E5FF).withOpacity(0.8)),
+                          Image.asset('assets/images/logo.png', height: 120, errorBuilder: (c,o,s) => Icon(Icons.shield_outlined, size: 100, color: const Color(0xFF00E5FF))),
                           const SizedBox(height: 30),
                           Text(
                             "GAS GUARD",
@@ -248,8 +249,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                     children: [
-                      Icon(Icons.shield_outlined,
-                          size: 60, color: const Color(0xFF00E5FF).withOpacity(0.8)),
+                      // Icon(Icons.shield_outlined,
+                      //     size: 60, color: const Color(0xFF00E5FF).withOpacity(0.8)),
+                      Image.asset('assets/images/logo.png', height: 80, errorBuilder: (c,o,s) => Icon(Icons.shield_outlined, size: 60, color: const Color(0xFF00E5FF))),
                       const SizedBox(height: 20),
                       Text(
                         "GAS GUARD",

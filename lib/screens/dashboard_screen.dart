@@ -169,16 +169,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Text("Dashboard", style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, letterSpacing: 2)),
             const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: const Color(0xFF08D9D6).withOpacity(0.2),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: const Color(0xFF08D9D6), width: 1),
+              // v2.0 Tag
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF08D9D6).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: const Color(0xFF08D9D6), width: 1),
+                ),
+                child: Text("v2.0", style: GoogleFonts.roboto(fontSize: 10, color: const Color(0xFF08D9D6), fontWeight: FontWeight.bold)),
               ),
-              child: Text("v2.0", style: GoogleFonts.roboto(fontSize: 10, color: const Color(0xFF08D9D6), fontWeight: FontWeight.bold)),
-            ),
-          ],
+            ],
+          ),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/images/logo.png', errorBuilder: (c,o,s) => const Icon(Icons.shield, color: Color(0xFF00E5FF))),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
