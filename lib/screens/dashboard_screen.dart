@@ -80,8 +80,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _checkAlert() {
-    // 1. If gas is HIGH (>300)
-    if (gasLevel > 300) {
+    // 1. If gas is HIGH (>600)
+    if (gasLevel > 600) {
       // Show Notification (System) - throttling to avoid spamming every second
       // We rely on the periodic check or existing state to not spam too hard, 
       // but for now let's just show it if we haven't shown the dialog recently.
@@ -93,8 +93,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         );
       }
     } 
-    // 2. If gas is LOW (<300) but dialog is still open -> Dismiss it
-    else if (gasLevel <= 300 && _isDialogVisible) {
+    // 2. If gas is LOW (<600) but dialog is still open -> Dismiss it
+    else if (gasLevel <= 600 && _isDialogVisible) {
       Navigator.of(context).pop(); // Close the dialog
       _isDialogVisible = false;
     }
@@ -156,7 +156,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Color statusColor = const Color(0xFF00E5FF); // Cyan
     Color bgColor = Colors.transparent;
     
-    if (gasLevel > 300) {
+    if (gasLevel > 600) { // Changed from 300 to 600
       statusText = "⚠ WARNING: GAS DETECTED!";
       statusColor = const Color(0xFFFF2E63); // Neon Red
       bgColor = statusColor.withOpacity(0.1); // Red tint background
@@ -165,9 +165,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E21),
       appBar: AppBar(
-        title: Text(
-          "MISSION CONTROL",
-          style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, letterSpacing: 2),
+        title: Row(
+          children: [
+            Text("Dashboard", style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, letterSpacing: 2)),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: const Color(0xFF08D9D6).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF08D9D6), width: 1),
+              ),
+              child: Text("v2.0", style: GoogleFonts.roboto(fontSize: 10, color: const Color(0xFF08D9D6), fontWeight: FontWeight.bold)),
+            ),
+          ],
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -258,7 +269,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       children: [
                         Icon(
-                           gasLevel > 300 ? Icons.warning_amber_rounded : Icons.check_circle_outline,
+                           gasLevel > 600 ? Icons.warning_amber_rounded : Icons.check_circle_outline, // Changed from 300 to 600
                            color: statusColor,
                            size: 40,
                         ),

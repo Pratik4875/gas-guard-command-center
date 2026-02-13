@@ -7,17 +7,18 @@
 #include <addons/RTDBHelper.h>
 
 // Wi-Fi Credentials
-#define WIFI_SSID "YOUR_WIFI_NAME"
-#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+#define WIFI_SSID "group5"
+#define WIFI_PASSWORD "12345678"
 
 // Firebase Credentials
-#define API_KEY "YOUR_FIREBASE_API_KEY"
-#define DATABASE_URL "YOUR_FIREBASE_DATABASE_URL" 
+#define API_KEY "AIzaSyDCuB98rUGo785Y6iQ68p2LXzoIJXjBLK4"
+#define DATABASE_URL "https://gasguard-bdcd2-default-rtdb.asia-southeast1.firebasedatabase.app" 
 
 // Hardware Pins
-#define SENSOR_PIN A0  // MQ Sensor
-#define LED_PIN D1     // Red LED
-#define BUZZER_PIN D2  // Buzzer
+#define SENSOR_PIN A0     // MQ Sensor
+#define RED_LED_PIN D1    // Danger LED (Red)
+#define BUZZER_PIN D2     // Buzzer
+#define GREEN_LED_PIN D5  // Safe LED (Green) - Connect to D5
 
 // Firebase Objects
 FirebaseData fbdo;
@@ -26,14 +27,22 @@ FirebaseConfig config;
 
 unsigned long sendDataPrevMillis = 0;
 bool signupOK = false;
-int gasThreshold = 300; // Adjust based on calibration
+int gasThreshold = 600; // Updated to 600 as per user request
 
 void setup() {
   Serial.begin(115200);
   
-  pinMode(LED_PIN, OUTPUT);
+  pinMode(RED_LED_PIN, OUTPUT);
+  pinMode(GREEN_LED_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(SENSOR_PIN, INPUT);
+  
+  // Test LEDs on startup
+  digitalWrite(RED_LED_PIN, HIGH);
+  digitalWrite(GREEN_LED_PIN, HIGH);
+  delay(500);
+  digitalWrite(RED_LED_PIN, LOW);
+  digitalWrite(GREEN_LED_PIN, LOW);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi");
@@ -73,11 +82,15 @@ void loop() {
 
   // Local Alert Logic
   if (gasValue > gasThreshold) {
-    digitalWrite(LED_PIN, HIGH);
-    tone(BUZZER_PIN, 1000); // Send 1KHz sound signal
+    // DANGER STATE
+    digitalWrite(RED_LED_PIN, HIGH);   // Red ON
+    digitalWrite(GREEN_LED_PIN, LOW);  // Green OFF
+    tone(BUZZER_PIN, 1000);            // Buzzer ON
   } else {
-    digitalWrite(LED_PIN, LOW);
-    noTone(BUZZER_PIN);
+    // SAFE STATE
+    digitalWrite(RED_LED_PIN, LOW);    // Red OFF
+    digitalWrite(GREEN_LED_PIN, HIGH); // Green ON
+    noTone(BUZZER_PIN);                // Buzzer OFF
   }
 
   // Send to Firebase (every 2 seconds)
