@@ -30,6 +30,31 @@ void main() async {
       print("Error initializing Firebase from saved settings: $e");
       isConfigured = false;
     }
+  } else {
+    // Fallback to Hardcoded Credentials (User Provided)
+    try {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyDCuB98rUGo785Y6iQ68p2LXzoIJXjBLK4",
+          appId: "1:621854528534:web:1227156217f5fee7f0d137",
+          messagingSenderId: "621854528534",
+          projectId: "gasguard-bdcd2",
+          databaseURL: "https://gasguard-bdcd2-default-rtdb.asia-southeast1.firebasedatabase.app",
+        ),
+      );
+      // Save them to storage so Settings screen is populated next time
+      await configService.saveSettings(
+        apiKey: "AIzaSyDCuB98rUGo785Y6iQ68p2LXzoIJXjBLK4",
+        appId: "1:621854528534:web:1227156217f5fee7f0d137",
+        messagingSenderId: "621854528534",
+        projectId: "gasguard-bdcd2",
+        dbUrl: "https://gasguard-bdcd2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      );
+      isConfigured = true;
+    } catch (e) {
+       print("Error initializing Firebase from hardcoded fallback: $e");
+       isConfigured = false;
+    }
   }
 
   runApp(GasLeakDetectorApp(isConfigured: isConfigured));
